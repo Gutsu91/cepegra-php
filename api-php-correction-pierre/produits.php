@@ -61,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') :
             strip_tags(addslashes($objectPOST->label)), //lire une propriété d'un objet PHP
             strip_tags($objectPOST->prix),
             isset($arrayPOST['id_categories']) ? strip_tags($arrayPOST['id_categories']) : 'NULL',// si on a l'id_categories, on l'utilise, sinon retourne NULL, d'où l'usage du %s pour l'id_categories dans $sql
+            // ca ne fonctionne pas il faudrait aller plus loin dans les tests (on ne donne le NULL que si la catégorie existe, hors on est en mode création)
         );
         /*
         $sql = sprintf("INSERT INTO personnes SET nom='%s', prenom='%s'",
@@ -91,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') :
 
     //si on a l'id du produit, le 'label' et le 'prix'
     if( isset($arrayPOST['label']) AND isset($arrayPOST['prix']) AND $_GET['id_produits']) :
-        $sql = sprintf("UPDATE produits SET label='%s', prix=%d, id_categories=%s WHERE id= %d",
+        $sql = sprintf("UPDATE produits SET label='%s', prix=%d, id_categories=%s WHERE id= %d", //pas de quote sur le %s car on veut passer NULL qui est un opérateur sql, si on mettait des quote on donnerait une string
             strip_tags(addslashes($arrayPOST['label'])), //lire une propriété d'un objet PHP
             strip_tags($arrayPOST['prix']),
             isset($arrayPOST['id_categories']) ? strip_tags($arrayPOST['id_categories']) : 'NULL',// si on a l'id_categories, on l'utilise, sinon retourne NULL, d'où l'usage du %s pour l'id_categories dans $sql
